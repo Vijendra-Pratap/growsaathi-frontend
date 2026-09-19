@@ -362,34 +362,62 @@
                 <!-- REGISTER TAB -->
                 <div class="tab-pane fade" id="register-pane" role="tabpanel">
                     <div class="mb-3">
-                        <h4 class="fw-bold text-dark mb-1">Onboard New Merchant</h4>
-                        <p class="text-muted small">Set up your business store profile to unlock instant AI diagnostics.</p>
+                        <h4 class="fw-bold text-dark mb-1">Create Merchant Account</h4>
+                        <p class="text-muted small">Set up your business store profile to unlock instant AI diagnostics in Demo Mode.</p>
                     </div>
 
                     <div id="registerAlert" class="alert alert-danger d-none" role="alert"></div>
+                    <div id="registerSuccessAlert" class="alert alert-success d-none" role="alert"></div>
 
                     <form id="registerForm">
-                        <div class="mb-3">
-                            <label class="form-label" for="regName">Merchant / Store Name</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-shop"></i></span>
-                                <input type="text" class="form-control" id="regName" placeholder="e.g. Sharma Cafe & Retail" required>
+                        <div class="row g-2 mb-2">
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regBusinessName">Business Name *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-shop"></i></span>
+                                    <input type="text" class="form-control" id="regBusinessName" placeholder="e.g. Rahul General Store" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regOwnerName">Owner Name *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control" id="regOwnerName" placeholder="e.g. Rahul Sharma" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label" for="regEmail">Work Email Address</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <input type="email" class="form-control" id="regEmail" placeholder="owner@store.com" required>
+                        <div class="row g-2 mb-2">
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regEmail">Email Address *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="regEmail" placeholder="rahul@store.com" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regPhone">Phone Number *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" class="form-control" id="regPhone" placeholder="+91 98765 43210" required>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label" for="regPassword">Create Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                <input type="password" class="form-control" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                        <div class="row g-2 mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regPassword">Password *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" class="form-control" id="regPassword" placeholder="Min 6 chars" minlength="6" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label mb-1" for="regConfirmPassword">Confirm Password *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                                    <input type="password" class="form-control" id="regConfirmPassword" placeholder="Re-enter password" minlength="6" required>
+                                </div>
                             </div>
                         </div>
 
@@ -424,7 +452,7 @@
             await AuthAPI.login(email, password);
             window.location.href = "dashboard.html";
         } catch (err) {
-            alertEl.textContent = err.message;
+            alertEl.textContent = err.message || "Invalid email or password";
             alertEl.classList.remove("d-none");
         } finally {
             btn.disabled = false;
@@ -435,22 +463,68 @@
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const alertEl = document.getElementById("registerAlert");
+        const successAlertEl = document.getElementById("registerSuccessAlert");
+        const loginAlertEl = document.getElementById("loginAlert");
         const btn = document.getElementById("regBtn");
         const spinner = document.getElementById("regSpinner");
 
         alertEl.classList.add("d-none");
+        successAlertEl.classList.add("d-none");
+
+        const businessName = document.getElementById("regBusinessName").value.trim();
+        const ownerName = document.getElementById("regOwnerName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const phone = document.getElementById("regPhone").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+        // Validation
+        if (!businessName || !ownerName || !email || !phone || !password || !confirmPassword) {
+            alertEl.textContent = "Please fill in all required fields.";
+            alertEl.classList.remove("d-none");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alertEl.textContent = "Please enter a valid email address.";
+            alertEl.classList.remove("d-none");
+            return;
+        }
+
+        if (password.length < 6) {
+            alertEl.textContent = "Password must be at least 6 characters in length.";
+            alertEl.classList.remove("d-none");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alertEl.textContent = "Passwords do not match. Please verify and try again.";
+            alertEl.classList.remove("d-none");
+            return;
+        }
+
         btn.disabled = true;
         spinner.classList.remove("d-none");
 
-        const name = document.getElementById("regName").value.trim();
-        const email = document.getElementById("regEmail").value.trim();
-        const password = document.getElementById("regPassword").value;
-
         try {
-            await AuthAPI.register(name, email, password);
-            window.location.href = "dashboard.html";
+            await AuthAPI.register(businessName, ownerName, email, phone, password);
+
+            // Registration succeeded
+            document.getElementById("registerForm").reset();
+            
+            // Switch to Login Tab and show success notice
+            document.getElementById("loginEmail").value = email;
+            document.getElementById("loginPassword").value = password;
+
+            loginAlertEl.className = "alert alert-success";
+            loginAlertEl.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Merchant account created successfully! You can now sign in.';
+            loginAlertEl.classList.remove("d-none");
+
+            const loginTabTrigger = new bootstrap.Tab(document.getElementById('login-tab'));
+            loginTabTrigger.show();
         } catch (err) {
-            alertEl.textContent = err.message;
+            alertEl.textContent = err.message || "Registration failed. Please try again.";
             alertEl.classList.remove("d-none");
         } finally {
             btn.disabled = false;

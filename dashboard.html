@@ -1335,12 +1335,12 @@
     async function initializeDashboard() {
         const user = AuthAPI.getUser();
         if (user) {
-            const name = user.name || "Merchant Store";
-            document.getElementById("topbarMerchantName").textContent = name;
+            const bName = user.businessName || user.name || "Merchant Store";
+            document.getElementById("topbarMerchantName").textContent = bName;
             document.getElementById("topbarMerchantEmail").textContent = user.email || "";
-            document.getElementById("greetingHeader").textContent = `Good ${getGreetingTime()}, ${name}`;
+            document.getElementById("greetingHeader").textContent = `Good ${getGreetingTime()}, ${bName}`;
             
-            const initials = name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "M";
+            const initials = bName.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase() || "M";
             document.getElementById("userAvatarText").textContent = initials;
         }
 
