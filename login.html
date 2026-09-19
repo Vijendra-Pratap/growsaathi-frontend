@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrowSaathi | Merchant Portal</title>
+    <link rel="icon" type="image/png" href="/assets/growsaathi-logo.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0052cc;
+            --primary-dark: #0747a6;
+            --primary-light: #ebf3ff;
+            --accent: #00b386;
+            --dark: #091e42;
+            --text-main: #172b4d;
+            --text-sub: #5e6c84;
+            --bg-page: #f4f5f7;
+            --card-border: #dfe1e6;
+            --shadow-subtle: 0 10px 30px -5px rgba(9, 30, 66, 0.08), 0 0 0 1px rgba(9, 30, 66, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: var(--shadow-subtle);
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        .auth-brand-side {
+            background: linear-gradient(145deg, #0747a6 0%, #0052cc 60%, #0065ff 100%);
+            color: #ffffff;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand-side::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo-img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.85;
+            font-weight: 600;
+        }
+
+        .tagline-box {
+            margin: 40px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tagline-quote {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.45;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+
+        .tagline-sub {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .feature-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .auth-form-side {
+            padding: 48px;
+        }
+
+        .nav-tabs-custom {
+            display: flex;
+            background: #ebecf0;
+            padding: 4px;
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 28px;
+        }
+
+        .nav-tabs-custom .nav-link {
+            flex: 1;
+            text-align: center;
+            border: none;
+            border-radius: 9px;
+            padding: 10px 16px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-sub);
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(9, 30, 66, 0.08);
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            border: 1.5px solid #dfe1e6;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-main);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+        }
+
+        .input-group-text {
+            background-color: #f4f5f7;
+            border: 1.5px solid #dfe1e6;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            color: var(--text-sub);
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary);
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            width: 100%;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: var(--primary-dark);
+            color: #ffffff;
+        }
+
+        .btn-primary-custom:active {
+            transform: scale(0.99);
+        }
+
+        .demo-box {
+            background: var(--primary-light);
+            border: 1px solid rgba(0, 82, 204, 0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 12.5px;
+            color: var(--primary-dark);
+            margin-top: 20px;
+        }
+
+        .demo-box code {
+            color: var(--primary-dark);
+            font-weight: 700;
+            background: rgba(255,255,255,0.7);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 991.98px) {
+            .auth-brand-side {
+                padding: 32px;
+            }
+            .auth-form-side {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            body {
+                padding: 12px;
+            }
+            .auth-brand-side {
+                padding: 28px 20px;
+            }
+            .tagline-quote {
+                font-size: 17px;
+            }
+            .auth-form-side {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="row g-0">
+        <!-- BRAND BANNER SIDE -->
+        <div class="col-lg-5 auth-brand-side">
+            <div>
+                <div class="brand-header">
+                    <img src="/assets/growsaathi-logo.png" alt="GrowSaathi" class="brand-logo-img">
+                    <div>
+                        <div class="brand-name">GrowSaathi</div>
+                        <div class="brand-subtitle">Merchant Intelligence</div>
+                    </div>
+                </div>
+
+                <div class="tagline-box">
+                    <div class="tagline-quote">
+                        "Paytm helps merchants get paid.<br>GrowSaathi helps them decide what to do next."
+                    </div>
+                    <div class="tagline-sub">
+                        Empowering retail businesses with local AI copilot diagnostics, automated win-back retention, and proactive catalog intelligence.
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="feature-pill">
+                    <i class="bi bi-shield-lock-fill text-warning"></i> 100% On-Premise Local AI Isolation
+                </div>
+                <div class="feature-pill ms-lg-0 mt-2">
+                    <i class="bi bi-lightning-charge-fill text-info"></i> Fast Deterministic Growth Actions
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM SIDE -->
+        <div class="col-lg-7 auth-form-side">
+            <ul class="nav nav-tabs-custom" id="authTabs" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link active w-100" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                    </button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane" type="button" role="tab">
+                        <i class="bi bi-shop me-1"></i> Create Merchant Account
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="authTabContent">
+                <!-- LOGIN TAB -->
+                <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+                    <div class="mb-3">
+                        <h4 class="fw-bold text-dark mb-1">Welcome Back</h4>
+                        <p class="text-muted small">Sign in to access your AI business copilot and sales intelligence.</p>
+                    </div>
+
+                    <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label" for="loginEmail">Merchant Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" id="loginEmail" placeholder="sharma.cafe@example.com" required value="sharma.cafe@example.com">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" for="loginPassword">Security Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required value="Password123">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom" id="loginBtn">
+                            <span id="loginSpinner" class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
+                            Sign In to Business Copilot
+                        </button>
+                    </form>
+
+                    <div class="demo-box">
+                        <i class="bi bi-info-circle-fill me-1"></i> <strong>Demo Account Credentials:</strong><br>
+                        Email: <code>sharma.cafe@example.com</code> &nbsp;|&nbsp; Password: <code>Password123</code>
+                    </div>
+                </div>
+
+                <!-- REGISTER TAB -->
+                <div class="tab-pane fade" id="register-pane" role="tabpanel">
+                    <div class="mb-3">
+                        <h4 class="fw-bold text-dark mb-1">Onboard New Merchant</h4>
+                        <p class="text-muted small">Set up your business store profile to unlock instant AI diagnostics.</p>
+                    </div>
+
+                    <div id="registerAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label" for="regName">Merchant / Store Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-shop"></i></span>
+                                <input type="text" class="form-control" id="regName" placeholder="e.g. Sharma Cafe & Retail" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="regEmail">Work Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" id="regEmail" placeholder="owner@store.com" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" for="regPassword">Create Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="regPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom" id="regBtn">
+                            <span id="regSpinner" class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
+                            Create Merchant Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/api.js"></script>
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const alertEl = document.getElementById("loginAlert");
+        const btn = document.getElementById("loginBtn");
+        const spinner = document.getElementById("loginSpinner");
+
+        alertEl.classList.add("d-none");
+        btn.disabled = true;
+        spinner.classList.remove("d-none");
+
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        try {
+            await AuthAPI.login(email, password);
+            window.location.href = "dashboard.html";
+        } catch (err) {
+            alertEl.textContent = err.message;
+            alertEl.classList.remove("d-none");
+        } finally {
+            btn.disabled = false;
+            spinner.classList.add("d-none");
+        }
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const alertEl = document.getElementById("registerAlert");
+        const btn = document.getElementById("regBtn");
+        const spinner = document.getElementById("regSpinner");
+
+        alertEl.classList.add("d-none");
+        btn.disabled = true;
+        spinner.classList.remove("d-none");
+
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+
+        try {
+            await AuthAPI.register(name, email, password);
+            window.location.href = "dashboard.html";
+        } catch (err) {
+            alertEl.textContent = err.message;
+            alertEl.classList.remove("d-none");
+        } finally {
+            btn.disabled = false;
+            spinner.classList.add("d-none");
+        }
+    });
+</script>
+
+</body>
+</html>
